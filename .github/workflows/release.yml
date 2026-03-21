@@ -27,7 +27,7 @@ jobs:
       - name: Build ISO
         run: |
           # Use xz compression for release builds to minimise ISO size
-          sed -i "s/('-comp' 'lz4' '-b' '256K')/('-comp' 'xz' '-b' '1M' '-Xdict-size' '1M')/" profiledef.sh
+          sed -i "s/('-comp' 'lz4' '-b' '256K')/('-comp' 'xz' '-b' '1M' '-Xdict-size' '1M' '-Xbcj' 'x86')/" profiledef.sh
           mkdir -p /out
           mkarchiso -v -w /tmp/archiso-work -o /out .
 
