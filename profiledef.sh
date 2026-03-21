@@ -62,5 +62,4 @@ file_permissions=(
   ["/etc/waybar/scripts/checkupdates.sh"]="0:0:755"
   ["/etc/waybar/scripts/power-profile-cycle.sh"]="0:0:755"
   ["/usr/local/bin/bloom-stage-assets"]="0:0:755"
-  ["/usr/share/bloom/post-install.sh"]="0:0:755"
 )
