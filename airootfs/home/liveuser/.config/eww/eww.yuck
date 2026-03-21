@@ -342,7 +342,7 @@
                           :onclick `/etc/xdg/eww/scripts/play-pause.sh`
                           {media-status == "Playing" ? "󰏤" : "󰐊"})
                   (button :class "ctrl-btn"
-                          :onclick "playerctl next" "󰒭"))))))))
+                          :onclick "playerctl next" "󰒭")))))))))
 
 ;; -- Workspaces widget ------------------------------------------------------
 
