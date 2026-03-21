@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Stage Bloom assets to /run/bloom so archinstall custom-commands can access
+# them from inside the arch-chroot (which bind-mounts /run from the host)
+
+set -e
+DEST="/run/bloom"
+mkdir -p "$DEST"
+
+# Plymouth theme tarball
+THEME_SRC="/usr/share/plymouth/themes/bloom"
+if [ -d "$THEME_SRC" ]; then
+    tar -czf "$DEST/bloom-plymouth.tar.gz" -C /usr/share/plymouth/themes bloom
+fi
+
+# GRUB theme (with wallpaper as background)
+GRUB_SRC="/usr/share/bloom/grub-theme"
+if [ -d "$GRUB_SRC" ]; then
+    cp -r "$GRUB_SRC" "$DEST/grub-theme"
+    # Copy the bloom wallpaper as the GRUB background
+    WP="/usr/share/wallpapers/bloom/bloom-wallpaper.png"
+    [ -f "$WP" ] && cp "$WP" "$DEST/grub-theme/background.png"
+fi
+
+# Firefox startpage + policies
+if [ -d "/usr/share/bloom/startpage" ]; then
+    cp -r /usr/share/bloom/startpage "$DEST/startpage"
+fi
+if [ -f "/etc/firefox/policies/policies.json" ]; then
+    cp /etc/firefox/policies/policies.json "$DEST/policies.json"
+fi
+
+# Post-install script
+cp /usr/share/bloom/post-install.sh "$DEST/post-install.sh"
+chmod +x "$DEST/post-install.sh"
+
+# Skel (liveuser configs for new users)
+if [ -d /etc/skel ]; then
+    cp -r /etc/skel "$DEST/skel"
+fi

@@ -1,0 +1,10 @@
+[Unit]
+Description=Thunar file manager daemon
+Documentation=man:thunar(1)
+
+[Service]
+ExecStart=/usr/bin/thunar --daemon
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

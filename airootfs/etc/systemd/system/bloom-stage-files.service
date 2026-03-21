@@ -1,0 +1,12 @@
+[Unit]
+Description=Stage Bloom installer assets to /run/bloom
+After=local-fs.target
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/bloom-stage-assets
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,98 @@
+// Bloom Plymouth Boot Theme
+
+Window.SetBackgroundTopColor(0.05, 0.02, 0.09);
+Window.SetBackgroundBottomColor(0.02, 0.01, 0.05);
+
+sw = Window.GetWidth();
+sh = Window.GetHeight();
+cx = sw / 2;
+cy = sh / 2;
+
+// --- Bloom icon (25% of screen height, centred slightly above middle) ---
+icon_img = Image("bloom.png");
+icon_w   = icon_img.GetWidth();
+icon_h   = icon_img.GetHeight();
+
+scale    = (sh * 0.22) / icon_h;
+icon_img = icon_img.Scale(Math.Int(icon_w * scale), Math.Int(icon_h * scale));
+icon_w   = icon_img.GetWidth();
+icon_h   = icon_img.GetHeight();
+
+icon = Sprite(icon_img);
+icon.SetX(Math.Int(cx - icon_w / 2));
+icon.SetY(Math.Int(cy - icon_h / 2 - sh * 0.05));
+icon.SetZ(1);
+
+// --- Progress bar track ---
+bar_w = Math.Int(sw * 0.30);
+bar_h = 4;
+bar_x = Math.Int(cx - bar_w / 2);
+bar_y = Math.Int(cy + icon_h / 2 + sh * 0.06);
+
+track_img = Image.SolidColor(bar_w, bar_h, 1.0, 1.0, 1.0, 0.15);
+track = Sprite(track_img);
+track.SetX(bar_x);
+track.SetY(bar_y);
+track.SetZ(1);
+
+// --- Progress bar fill (accent #B01828 ≈ 0.69, 0.09, 0.16) ---
+progress_img = Image.SolidColor(2, bar_h, 0.69, 0.09, 0.16, 1.0);
+progress = Sprite(progress_img);
+progress.SetX(bar_x);
+progress.SetY(bar_y);
+progress.SetZ(2);
+
+// --- Pulsing dots below progress bar ---
+dot_count = 3;
+dot_size  = 6;
+dot_gap   = 14;
+dots_total_w = dot_count * dot_size + (dot_count - 1) * dot_gap;
+dots = [];
+
+for (i = 0; i < dot_count; i++) {
+    d_img = Image.SolidColor(dot_size, dot_size, 1.0, 1.0, 1.0, 0.25);
+    d = Sprite(d_img);
+    d.SetX(Math.Int(cx - dots_total_w / 2 + i * (dot_size + dot_gap)));
+    d.SetY(bar_y + bar_h + 14);
+    d.SetZ(1);
+    dots[i] = d;
+}
+
+frame = 0;
+
+fun refresh_callback() {
+    global frame;
+    global dots;
+    global dot_count;
+    global dot_size;
+    global dot_gap;
+
+    frame = frame + 1;
+    active = Math.Int(frame / 12) % dot_count;
+
+    for (i = 0; i < dot_count; i++) {
+        if (i == active) {
+            img = Image.SolidColor(dot_size, dot_size, 0.69, 0.09, 0.16, 0.9);
+        } else {
+            img = Image.SolidColor(dot_size, dot_size, 1.0, 1.0, 1.0, 0.2);
+        }
+        dots[i].SetImage(img);
+    }
+}
+
+Plymouth.SetRefreshFunction(refresh_callback);
+
+fun progress_callback(duration, progress_val) {
+    global bar_w;
+    global bar_h;
+    global bar_x;
+    global progress;
+    global progress_img;
+
+    w = Math.Int(bar_w * progress_val);
+    if (w < 4) { w = 4; }
+    progress_img = Image.SolidColor(w, bar_h, 0.69, 0.09, 0.16, 1.0);
+    progress.SetImage(progress_img);
+}
+
+Plymouth.SetBootProgressFunction(progress_callback);

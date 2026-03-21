@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+import subprocess
+import json
+import sys
+
+def get_net_info():
+    try:
+        # Check wifi
+        res = subprocess.run(["nmcli", "-t", "-f", "ACTIVE,SSID,SIGNAL", "dev", "wifi"], capture_output=True, text=True)
+        for line in res.stdout.splitlines():
+            if line.startswith("yes:"):
+                parts = line.split(":")
+                ssid = parts[1]
+                signal = int(parts[2])
+                # Signal icons
+                if signal > 80: icon = "󰤨"
+                elif signal > 60: icon = "󰤥"
+                elif signal > 40: icon = "󰤢"
+                elif signal > 20: icon = "󰤟"
+                else: icon = "󰤯"
+                return {"text": f"{icon} {signal}%", "tooltip": f"Connected to {ssid}\nSignal: {signal}%"}
+        
+        # Check ethernet
+        res = subprocess.run(["nmcli", "-t", "-f", "DEVICE,TYPE,STATE", "dev"], capture_output=True, text=True)
+        for line in res.stdout.splitlines():
+            parts = line.split(":")
+            if len(parts) >= 3 and parts[1] == "ethernet" and parts[2] == "connected":
+                return {"text": "󰈀", "tooltip": f"Ethernet connected ({parts[0]})"}
+                
+        return {"text": "󰖪", "tooltip": "Disconnected"}
+    except Exception as e:
+        return {"text": "󰖪", "tooltip": f"Error: {str(e)}"}
+
+if __name__ == "__main__":
+    print(json.dumps(get_net_info()))

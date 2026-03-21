@@ -1,0 +1,7 @@
+[org/gnome/desktop/interface]
+color-scheme='prefer-dark'
+gtk-theme='Adwaita-dark'
+icon-theme='candy-icons'
+cursor-theme='Vanilla-DMZ-AA'
+cursor-size=24
+font-name='Noto Sans 11'

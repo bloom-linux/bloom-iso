@@ -1,0 +1,14 @@
+[Unit]
+Description=Bloom default UFW firewall rules
+After=ufw.service
+Requires=ufw.service
+ConditionPathExists=!/etc/ufw/.bloom-configured
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/bloom-ufw-rules
+ExecStartPost=/usr/bin/touch /etc/ufw/.bloom-configured
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

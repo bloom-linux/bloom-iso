@@ -1,0 +1,41 @@
+{
+  "policies": {
+    "DisableTelemetry": true,
+    "DisableFirefoxStudies": true,
+    "DisableFirefoxAccounts": false,
+    "DisablePocket": true,
+    "DisableFormHistory": false,
+    "OverrideFirstRunPage": "",
+    "OverridePostUpdatePage": "",
+    "FirefoxHome": {
+      "Search": true,
+      "TopSites": false,
+      "SponsoredTopSites": false,
+      "Highlights": false,
+      "Pocket": false,
+      "SponsoredPocket": false,
+      "Snippets": false,
+      "Locked": false
+    },
+    "Homepage": {
+      "URL": "file:///usr/share/bloom/startpage/index.html",
+      "Locked": false,
+      "StartPage": "homepage"
+    },
+    "NewTabPage": false,
+    "Preferences": {
+      "browser.newtabpage.enabled": {
+        "Value": false,
+        "Status": "default"
+      },
+      "browser.startup.homepage": {
+        "Value": "file:///usr/share/bloom/startpage/index.html",
+        "Status": "default"
+      },
+      "browser.theme.toolbar-theme": {
+        "Value": 0,
+        "Status": "default"
+      }
+    }
+  }
+}

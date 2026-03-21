@@ -1,0 +1,164 @@
+* {
+	border: none;
+	font-family: "JetBrainsMono Nerd Font", "Font Awesome 6 Free", "Noto Sans", sans-serif;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+window#waybar {
+	background: transparent;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+	background: rgba(25, 25, 35, 0.65);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+	transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.modules-left {
+	padding: 4px 12px;
+	border-radius: 16px;
+}
+
+#workspaces button {
+	color: rgba(255, 255, 255, 0.5);
+	padding: 0 6px;
+	border-radius: 8px;
+}
+
+#workspaces button.active {
+	color: #ffffff;
+	background: rgba(176, 24, 40, 0.7);
+	border-radius: 10px;
+}
+
+#workspaces button:hover {
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 8px;
+}
+
+.modules-center {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	padding: 0;
+}
+
+.modules-right {
+	padding: 4px 18px;
+	border-radius: 16px;
+}
+
+#clock {
+	color: #f0eef4;
+	padding: 0 6px;
+}
+
+image#launcher,
+image#browser,
+image#install {
+        margin: 0 4px;
+        padding: 0 4px;
+}
+
+image#launcher:hover,
+image#browser:hover,
+image#install:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+}
+#custom-power {
+        font-size: 16px;
+        color: #f0eef4;
+        padding: 0 10px;
+}
+
+#custom-power:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: #B01828;
+}
+#tray {
+	padding: 0 6px;
+}
+
+#bluetooth {
+	padding: 0 6px;
+	color: #88c0d0;
+}
+
+#bluetooth.off {
+	color: rgba(255, 255, 255, 0.3);
+}
+
+#backlight {
+	padding: 0 6px;
+	color: #ebcb8b;
+}
+
+#pulseaudio {
+	padding: 0 6px;
+}
+
+#pulseaudio.muted {
+	color: rgba(255, 255, 255, 0.3);
+}
+
+#custom-network {
+        padding: 0 6px;
+}
+
+#custom-network.disconnected {
+        color: rgba(255, 255, 255, 0.3);
+}
+#battery {
+	padding: 0 6px;
+}
+
+#battery.warning {
+	color: #ebcb8b;
+}
+
+#battery.critical {
+	color: #B01828;
+	animation: blink 1s linear infinite;
+}
+
+@keyframes blink {
+	to { opacity: 0.5; }
+}
+
+#custom-weather {
+	padding: 0 6px;
+	color: #88c0d0;
+	font-size: 13px;
+}
+
+#power-profiles-daemon {
+	padding: 0 6px;
+	color: #ebcb8b;
+}
+
+#power-profiles-daemon.power-saver {
+	color: #A3BE8C;
+}
+
+#power-profiles-daemon.performance {
+	color: #BF616A;
+}
+
+#custom-updates {
+	padding: 0 6px;
+	color: #A3BE8C;
+}
+
+#custom-updates.has-updates {
+	color: #ebcb8b;
+}
+
+#clock:hover {
+	color: #B01828;
+}

@@ -1,0 +1,26 @@
+[Default Applications]
+inode/directory=thunar.desktop
+text/plain=mousepad.desktop
+text/html=firefox.desktop
+text/xml=mousepad.desktop
+application/pdf=firefox.desktop
+application/zip=file-roller.desktop
+application/x-tar=file-roller.desktop
+application/x-bzip2=file-roller.desktop
+application/x-gzip=file-roller.desktop
+application/x-7z-compressed=file-roller.desktop
+application/x-rar=file-roller.desktop
+image/jpeg=eog.desktop
+image/png=eog.desktop
+image/gif=eog.desktop
+image/webp=eog.desktop
+image/svg+xml=eog.desktop
+image/tiff=eog.desktop
+image/bmp=eog.desktop
+video/mp4=firefox.desktop
+video/webm=firefox.desktop
+audio/mpeg=firefox.desktop
+audio/ogg=firefox.desktop
+x-scheme-handler/http=firefox.desktop
+x-scheme-handler/https=firefox.desktop
+x-scheme-handler/ftp=firefox.desktop

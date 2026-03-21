@@ -1,0 +1,130 @@
+{
+    "layer": "top",
+    "position": "top",
+    "margin-top": 8,
+    "margin-left": 12,
+    "margin-right": 12,
+    "fixed-center": true,
+
+    "modules-left": [
+        "hyprland/workspaces",
+        "image#launcher",
+        "image#install"
+    ],
+    "modules-right": [
+        "tray",
+        "bluetooth",
+        "backlight",
+        "pulseaudio",
+        "custom/network",
+        "power-profiles-daemon",
+        "battery",
+        "custom/updates",
+        "clock",
+        "custom/power"
+    ],
+
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "on-click": "activate"
+    },
+
+    "image#launcher": {
+        "path": "/home/liveuser/.local/share/bloom/icons/launcher.svg",
+        "size": 20,
+        "on-click": "rofi -show drun",
+        "tooltip": "Bloom"
+    },
+
+    "image#browser": {
+        "path": "/home/liveuser/.local/share/bloom/icons/browser.svg",
+        "size": 20,
+        "on-click": "firefox",
+        "tooltip": "Web Browser"
+    },
+
+    "image#install": {
+        "path": "/home/liveuser/.local/share/bloom/icons/install.svg",
+        "size": 20,
+        "on-click": "bloom-install",
+        "tooltip": "Install Bloom"
+    },
+
+    "tray": {
+        "spacing": 8
+    },
+
+    "bluetooth": {
+        "format": " 󰂯 ",
+        "format-off": "󰂲",
+        "format-disabled": "󰂲",
+        "format-connected": "󰂱 {device_alias}",
+        "on-click": "blueman-manager"
+    },
+
+    "backlight": {
+        "format": " 󰃠 {percent}% ",
+        "on-scroll-up": "swayosd-client --brightness raise",
+        "on-scroll-down": "swayosd-client --brightness lower"
+    },
+
+    "pulseaudio": {
+        "format": " {icon} {volume}% ",
+        "format-muted": " 󰖁 ",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "bloom-volume",
+        "on-scroll-up": "swayosd-client --output-volume raise",
+        "on-scroll-down": "swayosd-client --output-volume lower"
+    },
+
+    "custom/network": {
+        "exec": "/usr/local/bin/bloom-network-waybar",
+        "return-type": "json",
+        "interval": 10,
+        "format": " {} ",
+        "on-click": "bloom-network",
+        "tooltip": true
+    },
+
+    "power-profiles-daemon": {
+        "format": " {icon} ",
+        "tooltip-format": "Power profile: {profile}",
+        "format-icons": {
+            "default":     "󰓅",
+            "performance": "󰓅",
+            "balanced":    "󰾅",
+            "power-saver": "󰾆"
+        },
+        "on-click": "/etc/waybar/scripts/power-profile-cycle.sh"
+    },
+
+    "custom/updates": {
+        "exec": "/etc/waybar/scripts/checkupdates.sh",
+        "return-type": "json",
+        "interval": 3600,
+        "format": " 󰚰 {} ",
+        "tooltip": true
+    },
+
+    "battery": {
+        "format": " {icon} {capacity}% ",
+        "format-charging": " 󰂄 {capacity}% ",
+        "format-full": " 󰁹 ",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "states": { "warning": 30, "critical": 15 }
+    },
+
+    "clock": {
+        "format": " {:%H:%M} ",
+        "tooltip-format": "{:%A, %B %d, %Y}",
+        "on-click": "bloom-calendar"
+    },
+
+    "custom/power": {
+        "format": "  ",
+        "on-click": "bloom-power",
+        "tooltip": "Power"
+    }
+}

@@ -1,0 +1,9 @@
+NAME="Bloom"
+PRETTY_NAME="Bloom"
+ID=bloom
+ID_LIKE=arch
+BUILD_ID=rolling
+ANSI_COLOR="38;2;176;24;40"
+HOME_URL="https://bloom.linux"
+DOCUMENTATION_URL="https://bloom.linux/docs"
+LOGO=bloom
