@@ -58,8 +58,5 @@ file_permissions=(
   ["/usr/local/bin/Installation_guide"]="0:0:755"
   ["/usr/local/bin/livecd-sound"]="0:0:755"
   ["/usr/local/bin/bloom-ufw-rules"]="0:0:755"
-  ["/etc/waybar/scripts/weather.sh"]="0:0:755"
-  ["/etc/waybar/scripts/checkupdates.sh"]="0:0:755"
-  ["/etc/waybar/scripts/power-profile-cycle.sh"]="0:0:755"
   ["/usr/local/bin/bloom-stage-assets"]="0:0:755"
 )

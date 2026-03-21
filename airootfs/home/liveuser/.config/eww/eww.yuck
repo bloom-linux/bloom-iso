@@ -85,7 +85,7 @@
 (defpoll bar-workspaces :interval "0.5s" :initial "[1]"
   `r=$(hyprctl workspaces -j 2>/dev/null | jq -c '[.[].id] | sort' 2>/dev/null); [ -n "$r" ] && echo "$r" || echo "[1]"`)
 
-;; -- Bar window (Hyprland addreserved handles gap, not exclusive zone) ------
+;; -- Bar window: fixed 54px, left+right pills only -------------------------
 
 (defwindow bloom-bar
   :monitor 0
@@ -97,25 +97,99 @@
     :anchor "top center")
   :stacking  "overlay"
   :exclusive false
-  :focusable true
+  :focusable false
   :namespace "bloom-bar"
-  (bar-widget))
+  (bar-edges-widget))
 
-;; -- Main bar widget --------------------------------------------------------
+;; -- Island window: separate auto-sized overlay, centered at top -----------
 
-(defwidget bar-widget []
-  (overlay
+(defwindow bloom-island-win
+  :monitor 0
+  :geometry (geometry
+    :x "50%"
+    :y "0px"
+    :width  "10px"
+    :height "10px"
+    :anchor "top center")
+  :stacking  "overlay"
+  :exclusive false
+  :focusable false
+  :namespace "bloom-island"
+  (island-widget))
 
-    ;; Full-width dummy forces overlay to fill the window width,
-    ;; so halign=start/end children land at the true screen edges
+;; -- Bar edges widget (no GtkOverlay, simple hbox) -------------------------
+
+(defwidget bar-edges-widget []
+  (box
+    :orientation "h"
+    :hexpand     true
+    :space-evenly false
+
+    ;; Left pill
+    (box
+      :class       "bar-left"
+      :halign      "start"
+      :valign      "center"
+      :space-evenly false
+      :spacing     4
+      (workspaces)
+      (button :class "bar-btn" :onclick "hyprctl dispatch exec -- rofi -show drun" "󰅘")
+      (button :class "bar-btn" :onclick "hyprctl dispatch exec -- bloom-install" "󰇚")
+      (button
+        :class   {bar-bt == "on" ? "bar-mod bar-bt" : "bar-mod bar-bt off"}
+        :onclick "hyprctl dispatch exec -- blueman-manager"
+        :tooltip "Bluetooth"
+        {bar-bt == "on" ? " 󰂯 " : " 󰂲 "}))
+
     (box :hexpand true)
 
-    ;; Island
-    (eventbox
-      :halign      "center"
-      :valign      "start"
-      :onhover     `/etc/xdg/eww/scripts/hover-enter.sh`
-      :onhoverlost `/etc/xdg/eww/scripts/hover-leave.sh`
+    ;; Right pill
+    (box
+      :class       "bar-right"
+      :halign      "end"
+      :valign      "center"
+      :space-evenly false
+      :spacing     0
+      (systray :spacing 4 :icon-size 16 :hexpand false)
+      (button
+        :class   "bar-mod bar-bright"
+        :onclick "hyprctl dispatch exec -- bloom-brightness"
+        :tooltip "Brightness"
+        {" 󰃠 " + bar-bright + "% "})
+      (button
+        :class   {bar-muted == "yes" ? "bar-mod bar-vol muted" : "bar-mod bar-vol"}
+        :onclick "hyprctl dispatch exec -- bloom-volume"
+        :tooltip "Volume"
+        {bar-muted == "yes" ? " 󰖁 " : (" " + (bar-vol < 33 ? "󰕿" : (bar-vol < 66 ? "󰖀" : "󰕾")) + " " + bar-vol + "% ")})
+      (button
+        :class   {(bar-net == "󰖪" || bar-net == "󰤭") ? "bar-mod bar-net off" : "bar-mod bar-net"}
+        :onclick "hyprctl dispatch exec -- bloom-network"
+        :tooltip "Network"
+        {" " + bar-net + " "})
+      (button
+        :class   {bar-bat-charging == "yes" ? "bar-mod bar-bat charging" : (bar-bat-pct <= 15 ? "bar-mod bar-bat critical" : (bar-bat-pct <= 30 ? "bar-mod bar-bat warning" : "bar-mod bar-bat"))}
+        :onclick "hyprctl dispatch exec -- bloom-power"
+        :tooltip {"Battery: " + bar-bat-pct + "%"}
+        {" " + (bar-bat-charging == "yes" ? "󰂄" : (bar-bat-pct >= 90 ? "󰁹" : (bar-bat-pct >= 70 ? "󰂂" : (bar-bat-pct >= 50 ? "󰂁" : (bar-bat-pct >= 30 ? "󰁽" : (bar-bat-pct >= 15 ? "󰁻" : "󰂎")))))) + " " + bar-bat-pct + "% "})
+      (button
+        :class   "bar-mod bar-clock"
+        :onclick "hyprctl dispatch exec -- bloom-calendar"
+        :tooltip "Calendar"
+        {" " + bar-time + " "})
+      (button
+        :class   "bar-mod bar-power"
+        :onclick "hyprctl dispatch exec -- bloom-power"
+        :tooltip "Power"
+        "  "))))
+
+;; -- Island widget ----------------------------------------------------------
+
+(defwidget island-widget []
+  (eventbox
+    :halign      "center"
+    :valign      "start"
+    :onhover     `/etc/xdg/eww/scripts/hover-enter.sh`
+    :onhoverlost `/etc/xdg/eww/scripts/hover-leave.sh`
       (box
         :class {(notif-active || island-active) ? "island-pill active" : "island-pill"}
         :orientation "v"
@@ -269,61 +343,6 @@
                           {media-status == "Playing" ? "󰏤" : "󰐊"})
                   (button :class "ctrl-btn"
                           :onclick "playerctl next" "󰒭"))))))))
-
-    ;; Left pill
-    (box
-      :class       "bar-left"
-      :halign      "start"
-      :valign      "start"
-      :space-evenly false
-      :spacing     4
-      (workspaces)
-      (button :class "bar-btn" :onclick "hyprctl dispatch exec -- rofi -show drun" "󰅘")
-      (button :class "bar-btn" :onclick "hyprctl dispatch exec -- bloom-install" "󰇚")
-      (button
-        :class   {bar-bt == "on" ? "bar-mod bar-bt" : "bar-mod bar-bt off"}
-        :onclick "hyprctl dispatch exec -- blueman-manager"
-        :tooltip "Bluetooth"
-        {bar-bt == "on" ? " 󰂯 " : " 󰂲 "}))
-
-    ;; Right pill
-    (box
-      :class       "bar-right"
-      :halign      "end"
-      :valign      "start"
-      :space-evenly false
-      :spacing     0
-      (systray :spacing 4 :icon-size 16 :hexpand false)
-      (button
-        :class   "bar-mod bar-bright"
-        :onclick "hyprctl dispatch exec -- bloom-brightness"
-        :tooltip "Brightness"
-        {" 󰃠 " + bar-bright + "% "})
-      (button
-        :class   {bar-muted == "yes" ? "bar-mod bar-vol muted" : "bar-mod bar-vol"}
-        :onclick "hyprctl dispatch exec -- bloom-volume"
-        :tooltip "Volume"
-        {bar-muted == "yes" ? " 󰖁 " : (" " + (bar-vol < 33 ? "󰕿" : (bar-vol < 66 ? "󰖀" : "󰕾")) + " " + bar-vol + "% ")})
-      (button
-        :class   {(bar-net == "󰖪" || bar-net == "󰤭") ? "bar-mod bar-net off" : "bar-mod bar-net"}
-        :onclick "hyprctl dispatch exec -- bloom-network"
-        :tooltip "Network"
-        {" " + bar-net + " "})
-      (button
-        :class   {bar-bat-charging == "yes" ? "bar-mod bar-bat charging" : (bar-bat-pct <= 15 ? "bar-mod bar-bat critical" : (bar-bat-pct <= 30 ? "bar-mod bar-bat warning" : "bar-mod bar-bat"))}
-        :onclick "hyprctl dispatch exec -- bloom-power"
-        :tooltip {"Battery: " + bar-bat-pct + "%"}
-        {" " + (bar-bat-charging == "yes" ? "󰂄" : (bar-bat-pct >= 90 ? "󰁹" : (bar-bat-pct >= 70 ? "󰂂" : (bar-bat-pct >= 50 ? "󰂁" : (bar-bat-pct >= 30 ? "󰁽" : (bar-bat-pct >= 15 ? "󰁻" : "󰂎")))))) + " " + bar-bat-pct + "% "})
-      (button
-        :class   "bar-mod bar-clock"
-        :onclick "hyprctl dispatch exec -- bloom-calendar"
-        :tooltip "Calendar"
-        {" " + bar-time + " "})
-      (button
-        :class   "bar-mod bar-power"
-        :onclick "hyprctl dispatch exec -- bloom-power"
-        :tooltip "Power"
-        "  "))))
 
 ;; -- Workspaces widget ------------------------------------------------------
 
