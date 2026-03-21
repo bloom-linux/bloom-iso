@@ -1,0 +1,54 @@
+name: Build and release ISO
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+      options: --privileged
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: pacman -Sy --noconfirm archiso git
+
+      - name: Run preflight
+        run: bash scripts/preflight.sh
+
+      - name: Build ISO
+        run: |
+          mkdir -p /out
+          mkarchiso -v -w /tmp/archiso-work -o /out .
+
+      - name: Get ISO filename
+        id: iso
+        run: echo "path=$(ls /out/bloom-*.iso | head -1)" >> $GITHUB_OUTPUT
+
+      - name: Get version tag
+        id: tag
+        run: echo "tag=v$(date -u +%Y.%m.%d)-$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: Bloom ${{ steps.tag.outputs.tag }}
+          body: |
+            Automated ISO build from commit ${{ github.sha }}.
+
+            ## Install
+            Write to a USB drive:
+            ```
+            dd if=bloom-*.iso of=/dev/sdX bs=4M status=progress
+            ```
+            Or use [Ventoy](https://www.ventoy.net/) or [Balena Etcher](https://etcher.balena.io/).
+          files: ${{ steps.iso.outputs.path }}
