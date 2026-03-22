@@ -124,4 +124,7 @@ fi
 
 # ── Make scripts executable ───────────────────────────────────────────────────
 chmod +x /usr/local/bin/bloom-* 2>/dev/null || true
+
+# ── Add greeter to greeter group so it can access the seat ────────────────────
+usermod -aG seat greeter 2>/dev/null || true
 chmod +x /etc/xdg/eww/scripts/*.sh 2>/dev/null || true

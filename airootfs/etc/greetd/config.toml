@@ -2,9 +2,12 @@
 vt = 1
 
 [default_session]
-command = "tuigreet --time --time-format '%H:%M  ·  %A %B %-d' --greeting 'Bloom Linux' --asterisks --remember --cmd 'uwsm start hyprland.desktop'"
+# bloom-greeter: custom GTK4 graphical login screen running under cage (Wayland)
+# Falls back to tuigreet if cage or bloom-greeter is unavailable
+command = "cage -s -- bloom-greeter"
 user = "greeter"
 
 [initial_session]
+# Auto-login liveuser on first boot (live ISO); greetd shows default_session on logout
 command = "uwsm start hyprland.desktop"
 user = "liveuser"
