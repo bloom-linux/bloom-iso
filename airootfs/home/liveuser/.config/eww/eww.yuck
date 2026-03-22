@@ -18,7 +18,7 @@
   `hyprctl activewindow -j 2>/dev/null | jq -r '.class // ""'`)
 
 (defpoll active-title :interval "1s" :initial ""
-  `hyprctl activewindow -j 2>/dev/null | jq -r '(.title // "") | .[0:32]'`)
+  `hyprctl activewindow -j 2>/dev/null | jq -r '(.title // "") | .[0:52]'`)
 
 (defpoll active-icon :interval "1s" :initial ""
   `hyprctl activewindow -j 2>/dev/null | jq -r '.class // ""' | xargs -I{} /etc/xdg/eww/scripts/get-icon.sh {}`)
@@ -219,7 +219,7 @@
                    :class "art-ph-mini" :text "󰎆")
             (label :class "track-title"
                    :text {media-title != "" ? media-title : "---"}
-                   :limit-width 20)
+                   :limit-width 60)
             (button :class "ctrl-mini"
                     :onclick "playerctl previous" "󰒮")
             (button :class "ctrl-mini play-mini"
@@ -235,7 +235,7 @@
                    :text {active-icon != "" ? active-icon : ""})
             (label :class "app-name"
                    :text {active-title != "" ? active-title : (active-class != "" ? active-class : "Bloom")}
-                   :limit-width 22
+                   :limit-width 60
                    :hexpand true)
             (box :visible {media-connected == "true"}
                  :class "media-indicator"
@@ -274,14 +274,14 @@
                 :class      "notif-summary"
                 :text       notif-summary
                 :wrap       true
-                :limit-width 32
+                :limit-width 80
                 :xalign     0)
               (label
                 :visible    {notif-body != ""}
                 :class      "notif-body"
                 :text       notif-body
                 :wrap       true
-                :limit-width 36
+                :limit-width 90
                 :xalign     0)
               (box :orientation "h" :halign "end"
                 (button
@@ -310,7 +310,7 @@
                   (label
                     :class      "track-title"
                     :text       {media-title != "" ? media-title : "---"}
-                    :limit-width 20
+                    :limit-width 60
                     :xalign     0
                     :hexpand    true)
                   (label :visible {notif-count > 0}
@@ -319,13 +319,13 @@
                 (label
                   :class      "track-artist"
                   :text       media-artist
-                  :limit-width 22
+                  :limit-width 60
                   :xalign     0)
                 (label
                   :visible    {media-album != ""}
                   :class      "track-album"
                   :text       media-album
-                  :limit-width 22
+                  :limit-width 60
                   :xalign     0)
                 (progress
                   :class "prog-bar"

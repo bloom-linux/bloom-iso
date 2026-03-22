@@ -48,7 +48,7 @@ window {
 .bar-left    { padding: 4px 12px; }
 .bar-right   { padding: 4px 18px; }
 /* Shrink transition: ease-in so it starts very gradually, no snap */
-.island-pill { padding: 4px 12px; transition: margin-top 0.55s cubic-bezier(0.4, 0, 1, 1), border-top-color 0.55s cubic-bezier(0.4, 0, 1, 1), border-radius 0.55s cubic-bezier(0.4, 0, 1, 1), padding 0.55s cubic-bezier(0.4, 0, 1, 1), box-shadow 0.55s cubic-bezier(0.4, 0, 1, 1); }
+.island-pill { padding: 4px 12px; min-width: 280px; max-width: 800px; transition: margin-top 0.55s cubic-bezier(0.4, 0, 1, 1), border-top-color 0.55s cubic-bezier(0.4, 0, 1, 1), border-radius 0.55s cubic-bezier(0.4, 0, 1, 1), padding 0.55s cubic-bezier(0.4, 0, 1, 1), box-shadow 0.55s cubic-bezier(0.4, 0, 1, 1), min-width 0.55s cubic-bezier(0.4, 0, 1, 1); }
 
 /* Active: pill grows up to touch the screen top */
 /* Expand transition: ease-out, quick start that settles smoothly */
@@ -56,9 +56,10 @@ window {
     margin-top:        0;
     border-top-color:  transparent;
     border-radius:     0 0 20px 20px;
-    padding:           8px 22px;
+    padding:           8px 28px;
+    min-width:         420px;
     box-shadow:        0 12px 40px 0 $shadow;
-    transition:        margin-top 0.4s cubic-bezier(0, 0, 0.2, 1), border-top-color 0.4s cubic-bezier(0, 0, 0.2, 1), border-radius 0.4s cubic-bezier(0, 0, 0.2, 1), padding 0.4s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0, 0, 0.2, 1);
+    transition:        margin-top 0.4s cubic-bezier(0, 0, 0.2, 1), border-top-color 0.4s cubic-bezier(0, 0, 0.2, 1), border-radius 0.4s cubic-bezier(0, 0, 0.2, 1), padding 0.4s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0, 0, 0.2, 1), min-width 0.4s cubic-bezier(0, 0, 0.2, 1);
 }
 
 /* -- Island inner content areas -------------------------------------------- */

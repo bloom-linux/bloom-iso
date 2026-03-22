@@ -41,11 +41,13 @@ hyprland
 hypridle
 hyprlock
 uwsm
+greetd
+greetd-tuigreet
 intel-ucode
 iw
 iwd
 jq
-kitty
+alacritty
 less
 libappindicator-gtk3
 libnotify

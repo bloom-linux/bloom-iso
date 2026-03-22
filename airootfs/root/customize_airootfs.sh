@@ -3,6 +3,11 @@
 
 set -e
 
+# Create greeter system user for greetd (must exist before greetd starts)
+if ! id greeter &>/dev/null 2>&1; then
+    useradd -r -M -s /sbin/nologin greeter 2>/dev/null || true
+fi
+
 # Rebuild font cache so all icon fonts render correctly at first boot
 fc-cache -f
 
