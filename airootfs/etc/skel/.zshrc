@@ -3,6 +3,7 @@
 export EDITOR=nvim
 export VISUAL=nvim
 export TERM=xterm-256color
+export COLORTERM=truecolor
 
 # ── History ────────────────────────────────────────────────────────────────────
 HISTFILE=~/.zsh_history

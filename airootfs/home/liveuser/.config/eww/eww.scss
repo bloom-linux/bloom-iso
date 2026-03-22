@@ -339,6 +339,16 @@ window {
     color: $accent;
 }
 
+.bar-session {
+    font-size: 16px;
+    color: $accent;
+}
+
+.bar-session:hover {
+    background: $accent-15;
+    border-radius: 8px;
+}
+
 /* -- Dismiss button -------------------------------------------------------- */
 
 .dismiss-btn {

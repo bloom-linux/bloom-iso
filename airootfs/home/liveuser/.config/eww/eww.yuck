@@ -166,21 +166,20 @@
         :onclick "hyprctl dispatch exec -- bloom-network"
         :tooltip "Network"
         {" " + bar-net + " "})
-      (button
+      (label
         :class   {bar-bat-charging == "yes" ? "bar-mod bar-bat charging" : (bar-bat-pct <= 15 ? "bar-mod bar-bat critical" : (bar-bat-pct <= 30 ? "bar-mod bar-bat warning" : "bar-mod bar-bat"))}
-        :onclick "hyprctl dispatch exec -- bloom-power"
         :tooltip {"Battery: " + bar-bat-pct + "%"}
-        {" " + (bar-bat-charging == "yes" ? "󰂄" : (bar-bat-pct >= 90 ? "󰁹" : (bar-bat-pct >= 70 ? "󰂂" : (bar-bat-pct >= 50 ? "󰂁" : (bar-bat-pct >= 30 ? "󰁽" : (bar-bat-pct >= 15 ? "󰁻" : "󰂎")))))) + " " + bar-bat-pct + "% "})
+        :text    {" " + (bar-bat-charging == "yes" ? "󰂄" : (bar-bat-pct >= 90 ? "󰁹" : (bar-bat-pct >= 70 ? "󰂂" : (bar-bat-pct >= 50 ? "󰂁" : (bar-bat-pct >= 30 ? "󰁽" : (bar-bat-pct >= 15 ? "󰁻" : "󰂎")))))) + " " + bar-bat-pct + "% "})
       (button
         :class   "bar-mod bar-clock"
         :onclick "hyprctl dispatch exec -- bloom-calendar"
         :tooltip "Calendar"
         {" " + bar-time + " "})
       (button
-        :class   "bar-mod bar-power"
+        :class   "bar-mod bar-session"
         :onclick "hyprctl dispatch exec -- bloom-power"
-        :tooltip "Power"
-        "  "))))
+        :tooltip "Session"
+        " 󰐥 "))))
 
 ;; -- Island widget ----------------------------------------------------------
 
