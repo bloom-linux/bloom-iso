@@ -48,7 +48,7 @@ window {
 .bar-left    { padding: 4px 12px; }
 .bar-right   { padding: 4px 18px; }
 /* Shrink transition: ease-in so it starts very gradually, no snap */
-.island-pill { padding: 4px 12px; min-width: 280px; max-width: 800px; transition: margin-top 0.55s cubic-bezier(0.4, 0, 1, 1), border-top-color 0.55s cubic-bezier(0.4, 0, 1, 1), border-radius 0.55s cubic-bezier(0.4, 0, 1, 1), padding 0.55s cubic-bezier(0.4, 0, 1, 1), box-shadow 0.55s cubic-bezier(0.4, 0, 1, 1), min-width 0.55s cubic-bezier(0.4, 0, 1, 1); }
+.island-pill { padding: 4px 12px; min-width: 220px; transition: margin-top 0.3s cubic-bezier(0.4, 0, 1, 1), border-top-color 0.3s cubic-bezier(0.4, 0, 1, 1), border-radius 0.3s cubic-bezier(0.4, 0, 1, 1), padding 0.3s cubic-bezier(0.4, 0, 1, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 1, 1); }
 
 /* Active: pill grows up to touch the screen top */
 /* Expand transition: ease-out, quick start that settles smoothly */
@@ -56,10 +56,10 @@ window {
     margin-top:        0;
     border-top-color:  transparent;
     border-radius:     0 0 20px 20px;
-    padding:           8px 28px;
-    min-width:         420px;
+    padding:           8px 22px;
+    min-width:         340px;
     box-shadow:        0 12px 40px 0 $shadow;
-    transition:        margin-top 0.4s cubic-bezier(0, 0, 0.2, 1), border-top-color 0.4s cubic-bezier(0, 0, 0.2, 1), border-radius 0.4s cubic-bezier(0, 0, 0.2, 1), padding 0.4s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0, 0, 0.2, 1), min-width 0.4s cubic-bezier(0, 0, 0.2, 1);
+    transition:        margin-top 0.25s cubic-bezier(0, 0, 0.2, 1), border-top-color 0.25s cubic-bezier(0, 0, 0.2, 1), border-radius 0.25s cubic-bezier(0, 0, 0.2, 1), padding 0.25s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0, 0, 0.2, 1);
 }
 
 /* -- Island inner content areas -------------------------------------------- */
@@ -120,6 +120,16 @@ window {
     font-weight: 700;
     margin-left: 4px;
 }
+
+.notif-strip {
+    background:    $accent-15;
+    border-radius: 8px;
+    padding:       4px 8px;
+}
+.notif-strip-icon { color: $accent; font-size: 12px; min-width: 16px; }
+.notif-strip-text { color: $text-dim; font-size: 11px; }
+.notif-strip-dismiss { color: $text-faint; font-size: 12px; padding: 0 2px; }
+.notif-strip-dismiss:hover { color: $text; }
 
 .time-lbl {
     color:     $text-faint;
@@ -337,16 +347,6 @@ window {
     background: rgba(255, 255, 255, 0.10);
     border-radius: 8px;
     color: $accent;
-}
-
-.bar-session {
-    font-size: 16px;
-    color: $accent;
-}
-
-.bar-session:hover {
-    background: $accent-15;
-    border-radius: 8px;
 }
 
 /* -- Dismiss button -------------------------------------------------------- */

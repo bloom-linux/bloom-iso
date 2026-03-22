@@ -18,28 +18,28 @@
   `hyprctl activewindow -j 2>/dev/null | jq -r '.class // ""'`)
 
 (defpoll active-title :interval "1s" :initial ""
-  `hyprctl activewindow -j 2>/dev/null | jq -r '(.title // "") | .[0:52]'`)
+  `hyprctl activewindow -j 2>/dev/null | jq -r '(.title // "") | .[0:32]'`)
 
 (defpoll active-icon :interval "1s" :initial ""
-  `hyprctl activewindow -j 2>/dev/null | jq -r '.class // ""' | xargs -I{} /etc/xdg/eww/scripts/get-icon.sh {}`)
+  `hyprctl activewindow -j 2>/dev/null | jq -r '.class // ""' | xargs -I{} $HOME/.config/eww/scripts/get-icon.sh {}`)
 
 (defpoll media-status :interval "2s" :initial ""
-  `/etc/xdg/eww/scripts/media-status.sh`)
+  `$HOME/.config/eww/scripts/media-status.sh`)
 
 (defpoll media-connected :interval "1s" :initial "false"
   `s=$(playerctl status 2>/dev/null); [[ "$s" == "Playing" || "$s" == "Paused" ]] && echo "true" || echo "false"`)
 
-(defpoll media-title :interval "1s" :initial ""
-  `playerctl metadata title 2>/dev/null | head -c 64 || echo ""`)
+(deflisten media-title :initial ""
+  `playerctl metadata title 2>/dev/null; playerctl --follow metadata title 2>/dev/null`)
 
-(defpoll media-artist :interval "1s" :initial ""
-  `playerctl metadata artist 2>/dev/null | head -c 48 || echo ""`)
+(deflisten media-artist :initial ""
+  `playerctl metadata artist 2>/dev/null; playerctl --follow metadata artist 2>/dev/null`)
 
-(defpoll media-album :interval "3s" :initial ""
-  `playerctl metadata album 2>/dev/null | head -c 48 || echo ""`)
+(deflisten media-album :initial ""
+  `playerctl metadata album 2>/dev/null; playerctl --follow metadata album 2>/dev/null`)
 
-(defpoll media-art :interval "2s" :initial ""
-  `/etc/xdg/eww/scripts/get-art.sh`)
+(deflisten media-art :initial ""
+  `$HOME/.config/eww/scripts/art-watch.sh`)
 
 (defpoll media-pos :interval "1s" :initial 0
   `playerctl position 2>/dev/null | awk 'NR==1{print int($1)} END{if(!NR)print 0}'`)
@@ -77,7 +77,7 @@
   `timeout 2 bluetoothctl show 2>/dev/null | grep -q "Powered: yes" && echo "on" || echo "off"`)
 
 (defpoll bar-net :interval "10s" :initial "󰤭"
-  `/etc/xdg/eww/scripts/bar-net.sh`)
+  `$HOME/.config/eww/scripts/bar-net.sh`)
 
 (defpoll bar-active-ws :interval "0.5s" :initial 1
   `hyprctl activeworkspace -j 2>/dev/null | jq -r '.id // 1'`)
@@ -166,20 +166,21 @@
         :onclick "hyprctl dispatch exec -- bloom-network"
         :tooltip "Network"
         {" " + bar-net + " "})
-      (label
+      (button
         :class   {bar-bat-charging == "yes" ? "bar-mod bar-bat charging" : (bar-bat-pct <= 15 ? "bar-mod bar-bat critical" : (bar-bat-pct <= 30 ? "bar-mod bar-bat warning" : "bar-mod bar-bat"))}
+        :onclick "hyprctl dispatch exec -- bloom-power"
         :tooltip {"Battery: " + bar-bat-pct + "%"}
-        :text    {" " + (bar-bat-charging == "yes" ? "󰂄" : (bar-bat-pct >= 90 ? "󰁹" : (bar-bat-pct >= 70 ? "󰂂" : (bar-bat-pct >= 50 ? "󰂁" : (bar-bat-pct >= 30 ? "󰁽" : (bar-bat-pct >= 15 ? "󰁻" : "󰂎")))))) + " " + bar-bat-pct + "% "})
+        {" " + (bar-bat-charging == "yes" ? "󰂄" : (bar-bat-pct >= 90 ? "󰁹" : (bar-bat-pct >= 70 ? "󰂂" : (bar-bat-pct >= 50 ? "󰂁" : (bar-bat-pct >= 30 ? "󰁽" : (bar-bat-pct >= 15 ? "󰁻" : "󰂎")))))) + " " + bar-bat-pct + "% "})
       (button
         :class   "bar-mod bar-clock"
         :onclick "hyprctl dispatch exec -- bloom-calendar"
         :tooltip "Calendar"
         {" " + bar-time + " "})
       (button
-        :class   "bar-mod bar-session"
+        :class   "bar-mod bar-power"
         :onclick "hyprctl dispatch exec -- bloom-power"
-        :tooltip "Session"
-        " 󰐥 "))))
+        :tooltip "Power"
+        "  "))))
 
 ;; -- Island widget ----------------------------------------------------------
 
@@ -187,8 +188,8 @@
   (eventbox
     :halign      "center"
     :valign      "start"
-    :onhover     `/etc/xdg/eww/scripts/hover-enter.sh`
-    :onhoverlost `/etc/xdg/eww/scripts/hover-leave.sh`
+    :onhover     `$HOME/.config/eww/scripts/hover-enter.sh`
+    :onhoverlost `$HOME/.config/eww/scripts/hover-leave.sh`
       (box
         :class {(notif-active || island-active) ? "island-pill active" : "island-pill"}
         :orientation "v"
@@ -218,11 +219,11 @@
                    :class "art-ph-mini" :text "󰎆")
             (label :class "track-title"
                    :text {media-title != "" ? media-title : "---"}
-                   :limit-width 60)
+                   :limit-width 20)
             (button :class "ctrl-mini"
                     :onclick "playerctl previous" "󰒮")
             (button :class "ctrl-mini play-mini"
-                    :onclick `/etc/xdg/eww/scripts/play-pause.sh`
+                    :onclick `$HOME/.config/eww/scripts/play-pause.sh`
                     {media-status == "Playing" ? "󰏤" : "󰐊"})
             (button :class "ctrl-mini"
                     :onclick "playerctl next" "󰒭"))
@@ -234,7 +235,7 @@
                    :text {active-icon != "" ? active-icon : ""})
             (label :class "app-name"
                    :text {active-title != "" ? active-title : (active-class != "" ? active-class : "Bloom")}
-                   :limit-width 60
+                   :limit-width 22
                    :hexpand true)
             (box :visible {media-connected == "true"}
                  :class "media-indicator"
@@ -253,9 +254,9 @@
         ;; Single revealer for all expanded states -- slides down
         ;; Inside, :visible switches between notif and media content
         (revealer
-          :transition "slide_down"
-          :reveal     {notif-active || (island-expanded && media-connected == "true")}
-          :duration   "250ms"
+          :transition "none"
+          :reveal     {notif-active || island-expanded}
+          :duration   "0ms"
 
           (box :orientation "v" :space-evenly false
 
@@ -273,19 +274,19 @@
                 :class      "notif-summary"
                 :text       notif-summary
                 :wrap       true
-                :limit-width 80
+                :limit-width 32
                 :xalign     0)
               (label
                 :visible    {notif-body != ""}
                 :class      "notif-body"
                 :text       notif-body
                 :wrap       true
-                :limit-width 90
+                :limit-width 36
                 :xalign     0)
               (box :orientation "h" :halign "end"
                 (button
                   :class   "dismiss-btn"
-                  :onclick `/etc/xdg/eww/scripts/notif-dismiss.sh`
+                  :onclick `$HOME/.config/eww/scripts/notif-dismiss.sh`
                   "Dismiss")))
 
             ;; Media expanded content
@@ -309,7 +310,7 @@
                   (label
                     :class      "track-title"
                     :text       {media-title != "" ? media-title : "---"}
-                    :limit-width 60
+                    :limit-width 20
                     :xalign     0
                     :hexpand    true)
                   (label :visible {notif-count > 0}
@@ -318,13 +319,13 @@
                 (label
                   :class      "track-artist"
                   :text       media-artist
-                  :limit-width 60
+                  :limit-width 22
                   :xalign     0)
                 (label
                   :visible    {media-album != ""}
                   :class      "track-album"
                   :text       media-album
-                  :limit-width 60
+                  :limit-width 22
                   :xalign     0)
                 (progress
                   :class "prog-bar"
@@ -338,7 +339,7 @@
                   (button :class "ctrl-btn"
                           :onclick "playerctl previous" "󰒮")
                   (button :class "ctrl-btn play"
-                          :onclick `/etc/xdg/eww/scripts/play-pause.sh`
+                          :onclick `$HOME/.config/eww/scripts/play-pause.sh`
                           {media-status == "Playing" ? "󰏤" : "󰐊"})
                   (button :class "ctrl-btn"
                           :onclick "playerctl next" "󰒭")))))))))
