@@ -19,13 +19,15 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install build tools
-        run: pacman -Sy --noconfirm archiso git
+        run: pacman -Sy --noconfirm archiso git imagemagick
 
       - name: Run preflight
         run: bash scripts/preflight.sh
 
       - name: Build ISO
         run: |
+          # Convert syslinux splash to 24-bit RGB (vesamenu.c32 doesn't support 16-bit RGBA)
+          convert syslinux/splash.png -depth 8 -alpha remove -alpha off syslinux/splash.png || true
           # Use xz compression for release builds to minimise ISO size
           sed -i "s/('-comp' 'lz4' '-b' '256K')/('-comp' 'xz' '-b' '1M' '-Xdict-size' '1M' '-Xbcj' 'x86')/" profiledef.sh
           mkdir -p /out

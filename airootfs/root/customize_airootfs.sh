@@ -85,8 +85,6 @@ fi
 # ── Sync liveuser config to /etc/skel ────────────────────────────────────────
 # So newly created users after installation inherit the Bloom config
 if [[ -d /home/liveuser ]]; then
-    mkdir -p /home/liveuser/.config/waybar
-    cp -rf /etc/xdg/waybar/. /home/liveuser/.config/waybar/ 2>/dev/null || true
     mkdir -p /home/liveuser/.config/eww
     cp -rf /etc/xdg/eww/. /home/liveuser/.config/eww/ 2>/dev/null || true
     
@@ -121,6 +119,4 @@ fi
 
 # ── Make scripts executable ───────────────────────────────────────────────────
 chmod +x /usr/local/bin/bloom-* 2>/dev/null || true
-chmod +x /etc/waybar/scripts/*.sh 2>/dev/null || true
 chmod +x /etc/xdg/eww/scripts/*.sh 2>/dev/null || true
-chmod +x /usr/share/bloom/post-install.sh 2>/dev/null || true
